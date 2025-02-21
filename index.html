@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Потужнометр</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background: linear-gradient(to bottom, #0057b7 50%, #ffd700 50%);
+            padding: 50px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            transition: opacity 0.5s;
+        }
+        .input-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .clear-btn {
+            background: #dc3545;
+            color: white;
+            padding: 8px 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .clear-btn:hover {
+            background: #c82333;
+        }
+        button {
+            background: #ffd700;
+            color: #0057b7;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+        button:hover {
+            background: #ffcc00;
+        }
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .loading {
+            display: none;
+            margin-top: 10px;
+            font-size: 16px;
+            font-style: italic;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainContainer">
+        <h1>Потужнометр</h1>
+        <p>Введіть слово (до 42 символів) та дізнайтеся його потужність!</p>
+        <div class="input-container">
+            <input type="text" id="wordInput" placeholder="Введіть слово" maxlength="42" oninput="checkLength()">
+            <button class="clear-btn" onclick="clearInput()">✖</button>
+        </div>
+        <button onclick="calculatePower()">Оцінити потужність</button>
+        <div class="loading" id="loading">Обробка...</div>
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function checkLength() {
+            let wordInput = document.getElementById("wordInput");
+            let resultDiv = document.getElementById("result");
+            if (wordInput.value.length === 42) {
+                resultDiv.innerText = "Ви досягли максимального ліміту символів (42)!";
+            } else {
+                resultDiv.innerText = "";
+            }
+        }
+
+        function calculatePower() {
+            let wordInput = document.getElementById("wordInput");
+            let word = wordInput.value.trim().toLowerCase();
+            let loadingDiv = document.getElementById("loading");
+            let resultDiv = document.getElementById("result");
+            let mainContainer = document.getElementById("mainContainer");
+            
+            if (word === "") {
+                resultDiv.innerText = "Будь ласка, введіть слово!";
+                return;
+            }
+            
+            if (word === "розум даніва") {
+                mainContainer.style.opacity = "0";
+                setTimeout(() => {
+                    mainContainer.style.opacity = "1";
+                }, 7000);
+                return;
+            }
+            
+            resultDiv.innerText = "";
+            loadingDiv.style.display = "block";
+            
+            setTimeout(() => {
+                loadingDiv.style.display = "none";
+                let powerLevel = getPowerLevel(word);
+                resultDiv.innerText = `Результат: ${powerLevel}`;
+            }, 1500);
+        }
+
+        function getPowerLevel(word) {
+            let responses = [
+                "Слабке слово",
+                "Ледве відчутна потужність",
+                "Це слово майже без сили",
+                "Трішки сильніше за шепіт",
+                "Середньої потужності",
+                "Звичайне слово, нічого особливого",
+                "Це слово має певний заряд енергії",
+                "Ти вибрав досить сильне слово!",
+                "Відчутна потужність!",
+                "Могутнє слово!"
+            ];
+            
+            let specialWords = {
+                "україна": "НАЙПОТУЖНІШЕ СЛОВО! 💙💛",
+                "слава": "Слава Україні! Героям слава! 🇺🇦",
+                "героям": "Героям слава! 🇺🇦",
+                "енергія": "Це слово заряджене на 220В! ⚡",
+                "любов": "Найсильніше почуття у світі! ❤️",
+                "гроші": "Фінансова незалежність! 💰",
+                "кіт": "М'який, але могутній! 🐱",
+                "дракон": "Вогняна потужність! 🐉",
+                "радість": "Позитивна енергія! 😊"
+            };
+            
+            return specialWords[word] || responses[Math.floor(Math.random() * responses.length)];
+        }
+
+        function clearInput() {
+            document.getElementById("wordInput").value = "";
+            document.getElementById("result").innerText = "";
+        }
+    </script>
+</body>
+</html>
